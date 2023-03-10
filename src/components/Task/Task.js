@@ -51,10 +51,7 @@ export default class Task extends Component {
           <input className="toggle" type="checkbox" onChange={onToggleDone} checked={!!done} />
           <label>
             <span className="description">{label}</span>
-            <span className="created">
-              created
-              {this.state.timer}
-            </span>
+            <span className="created">created {this.state.timer}</span>
           </label>
           <button className="icon icon-edit" />
           <button className="icon icon-destroy" onClick={onDeleted} />
