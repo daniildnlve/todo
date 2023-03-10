@@ -1,122 +1,106 @@
-import { Component } from "react";
+import { Component } from 'react'
 
-import NewTaskForm from "../NewTaskForm/NewTaskForm";
-import TaskList from "../TaskList/TaskList";
-import Footer from "../Footer/Footer";
+import NewTaskForm from '../NewTaskForm/NewTaskForm'
+import TaskList from '../TaskList/TaskList'
+import Footer from '../Footer/Footer'
 
 import './App.css'
 
 export default class App extends Component {
-  
-  maxId = 100;
+  maxId = 100
 
-  state = {
-    taskData: [],
-    filter: 'all'
+  constructor(props) {
+    super(props)
+    this.state = {
+      taskData: [],
+      filter: 'all',
+    }
   }
 
   createItem(label) {
     return {
       label,
       done: false,
-      id: this.maxId++,
-      time: new Date()
+      id: (this.maxId += 1),
+      time: new Date(),
     }
   }
 
   deleteItem = (id) => {
-    this.setState(({taskData}) => {
-      const idx = taskData.findIndex((el) => el.id === id);
-      
-      const newArray = [
-        ...taskData.slice(0, idx),
-        ...taskData.slice(idx + 1)
-      ];
+    this.setState(({ taskData }) => {
+      const idx = taskData.findIndex((el) => el.id === id)
+
+      const newArray = [...taskData.slice(0, idx), ...taskData.slice(idx + 1)]
 
       return {
-        taskData: newArray
+        taskData: newArray,
       }
     })
-  };
+  }
 
   deleteAllDone = () => {
-    this.setState(({taskData}) => {
-      const newArray = [
-        ...taskData.filter((el) => !el.done)
-      ];
+    this.setState(({ taskData }) => {
+      const newArray = [...taskData.filter((el) => !el.done)]
 
       return {
-        taskData: newArray
+        taskData: newArray,
       }
-    });
+    })
   }
 
   addItem = (text) => {
-    this.setState(({taskData}) => {
-      const newArr = [
-        ...taskData,
-        this.createItem(text)
-      ];
+    this.setState(({ taskData }) => {
+      const newArr = [...taskData, this.createItem(text)]
 
       return {
-        taskData: newArr
+        taskData: newArr,
       }
-
-    });
+    })
   }
 
   onToggleDone = (id) => {
-    this.setState(({taskData}) => {
-      const idx = taskData.findIndex((el) => el.id === id);
-      const oldItem = taskData[idx];
-      const newItem = {...oldItem, done: !oldItem.done};
-      const newArray = [
-        ...taskData.slice(0, idx),
-        newItem,
-        ...taskData.slice(idx + 1)
-      ];
+    this.setState(({ taskData }) => {
+      const idx = taskData.findIndex((el) => el.id === id)
+      const oldItem = taskData[idx]
+      const newItem = { ...oldItem, done: !oldItem.done }
+      const newArray = [...taskData.slice(0, idx), newItem, ...taskData.slice(idx + 1)]
 
       return {
-        taskData: newArray
-      };
+        taskData: newArray,
+      }
     })
-  };
+  }
 
   onFilterChange = (filter) => {
-    this.setState({filter});
+    this.setState({ filter })
   }
 
   filterTasks = (items, filter) => {
     if (filter === 'all') {
-      return items;
+      return items
     }
     if (filter === 'active') {
-      return items.filter((item) => !item.done);
+      return items.filter((item) => !item.done)
     }
     if (filter === 'completed') {
-      return items.filter((item) => item.done);
+      return items.filter((item) => item.done)
     }
   }
 
   render() {
-    const {taskData, filter} = this.state;
-    const todoCount = taskData
-                      .filter((el) => !el.done).length;
+    const { taskData, filter } = this.state
+    const todoCount = taskData.filter((el) => !el.done).length
     const visibleItems = this.filterTasks(taskData, filter)
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm onItemAdded={this.addItem}/>
+          <NewTaskForm onItemAdded={this.addItem} />
         </header>
         <section className="main">
-          <TaskList 
-            tasks={visibleItems}
-            onDeleted={this.deleteItem}
-            onToggleDone={this.onToggleDone}
-          />
-          <Footer 
+          <TaskList tasks={visibleItems} onDeleted={this.deleteItem} onToggleDone={this.onToggleDone} />
+          <Footer
             todoCount={todoCount}
             onDeletedAllDone={this.deleteAllDone}
             filter={filter}
@@ -124,7 +108,6 @@ export default class App extends Component {
           />
         </section>
       </section>
-    );
+    )
   }
 }
-
