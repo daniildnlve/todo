@@ -11,11 +11,7 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    taskData: [
-      this.createItem('Drink Cofee'),
-      this.createItem('Make Awesome App'),
-      this.createItem('Have a lunch')
-    ],
+    taskData: [],
     filter: 'all'
   }
 
@@ -23,7 +19,8 @@ export default class App extends Component {
     return {
       label,
       done: false,
-      id: this.maxId++
+      id: this.maxId++,
+      time: new Date()
     }
   }
 
